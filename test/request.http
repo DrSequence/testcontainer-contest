@@ -1,0 +1,40 @@
+###
+GET http://localhost:8080/api/v1/portfolio?ID=65dbc28e27b48ddbab8aa040
+
+<> 2024-02-25T235711.200.txt
+<> 2024-02-25T234718.200.txt
+<> 2024-02-25T234409.500.txt
+<> 2024-02-25T233209.500.txt
+<> 2024-02-25T232813.500.txt
+<> 2024-02-25T232808.400.txt
+<> 2024-02-25T232802.400.txt
+<> 2024-02-25T232735.400.txt
+
+
+###
+
+# curl -X POST -H "Content-Type: application/json" -d '{
+#    "name": "John Doe",
+#    "details": "Software Developer"
+#}' http://localhost:8080/api/v1/portfolio
+POST http://localhost:8080/api/v1/save-portfolio
+Content-Type: application/json
+
+{
+  "name": "El Pontro",
+  "details": "Software Developer"
+}
+
+<> 2024-02-25T235702.201.txt
+<> 2024-02-25T234326.201.txt
+<> 2024-02-25T234318.400.txt
+
+###
+
+# curl -X GET "http://localhost:8080/api/v1/portfolios?page=1&pageSize=10"
+GET http://localhost:8080/api/v1/portfolios?page=1&pageSize=10
+
+<> 2024-02-26T000321.200.json
+
+###
+
