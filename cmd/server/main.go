@@ -5,7 +5,7 @@ import (
 	"log"
 	"net/http"
 
-	pt "testcontainer-contest/app/usercase/portfolio"
+	pt "testcontainer-contest/app/usecase/portfolio"
 	"testcontainer-contest/handler"
 )
 

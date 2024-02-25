@@ -9,7 +9,7 @@ import (
 	"testcontainer-contest/entity"
 	"time"
 
-	s "testcontainer-contest/app/usercase/portfolio"
+	s "testcontainer-contest/app/usecase/portfolio"
 	mapper "testcontainer-contest/pkg"
 )
 
