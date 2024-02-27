@@ -2,15 +2,11 @@ package portfolio
 
 import (
 	"context"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"log"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
-	"github.com/testcontainers/testcontainers-go"
-	"github.com/testcontainers/testcontainers-go/wait"
-	"go.mongodb.org/mongo-driver/mongo"
-	"go.mongodb.org/mongo-driver/mongo/options"
-
 	pm "testcontainer-contest/entity"
 )
 
@@ -22,45 +18,34 @@ const (
 func TestFindByIDWithTestContainer(t *testing.T) {
 	ctx := context.Background()
 
-	req := testcontainers.ContainerRequest{
-		Image:        "mongo:latest",
-		ExposedPorts: []string{"27017/tcp"},
-		WaitingFor:   wait.ForLog("Ready to accept connections"),
-	}
-	mongoContainer, err := testcontainers.GenericContainer(ctx, testcontainers.GenericContainerRequest{
-		ContainerRequest: req,
-		Started:          true,
-	})
-	if err != nil {
-		log.Fatalf("Could not start mongo: %s", err)
-	}
+	mongodbContainer := RunMongo(ctx, t)
+	// Clean up the container
 	defer func() {
-		if err := mongoContainer.Terminate(ctx); err != nil {
-			log.Fatalf("Could not stop mongo: %s", err)
+		if err := mongodbContainer.Terminate(ctx); err != nil {
+			t.Fatalf("failed to terminate container: %s", err)
 		}
 	}()
 
-	ip, err := mongoContainer.ContainerIP(ctx)
-	if err != nil {
-		log.Fatal(err)
-	}
-	address := "mongodb://" + ip + ":27017"
+	mappedPort, err := mongodbContainer.MappedPort(ctx, "27017")
+	address := "mongodb://localhost:" + mappedPort.Port()
 
-	// Инициализация MongoDB клиента и создание коллекции
-	client, err := mongo.Connect(context.Background(), options.Client().ApplyURI(address))
-	if err != nil {
-		t.Fatal(err)
-	}
-	defer client.Disconnect(context.Background())
-	collection := client.Database("test").Collection("portfolios")
+	client := GetClient(ctx, t, address)
+	defer client.Disconnect(ctx)
+
+	collection := client.Database(database).Collection(collectionName)
 
 	testPortfolio := pm.Portfolio{
 		Name:    "John Doe",
 		Details: "Software Developer",
 	}
-	_, err = collection.InsertOne(context.Background(), testPortfolio)
+	insertResult, err := collection.InsertOne(ctx, testPortfolio)
 	if err != nil {
 		t.Fatal(err)
+	}
+
+	savedObjectID, ok := insertResult.InsertedID.(primitive.ObjectID)
+	if !ok {
+		log.Fatal("InsertedID is not an ObjectID")
 	}
 
 	service, err := NewMongoPortfolioService(address, database, collectionName)
@@ -68,7 +53,7 @@ func TestFindByIDWithTestContainer(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	foundPortfolio, err := service.FindByID(context.Background(), testPortfolio.ID.Hex())
+	foundPortfolio, err := service.FindByID(ctx, savedObjectID.Hex())
 	if err != nil {
 		t.Fatal(err)
 	}

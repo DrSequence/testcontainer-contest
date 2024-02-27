@@ -1,0 +1,10 @@
+# server
+server:
+  address: "localhost"
+  port: 8080
+
+# database settings
+database:
+  address: "mongodb://localhost:27017"
+  user: "root"
+  pass: "example"

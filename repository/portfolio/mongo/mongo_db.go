@@ -16,5 +16,6 @@ func NewMongoDb(uri, database, collection string) (*mongo.Collection, error) {
 	}
 	db := client.Database(database)
 	col := db.Collection(collection)
+
 	return col, err
 }
