@@ -1,7 +1,7 @@
 package pkg
 
 import (
-	e "testcontainer-contest/entity"
+	e "testcontainer-contest/domain"
 	h "testcontainer-contest/model"
 )
 

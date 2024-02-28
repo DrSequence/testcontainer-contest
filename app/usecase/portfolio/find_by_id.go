@@ -4,7 +4,7 @@ import (
 	"context"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
-	pm "testcontainer-contest/entity"
+	pm "testcontainer-contest/domain"
 )
 
 func (m *MongoPortfolioService) FindByID(ctx context.Context, ID string) (*pm.Portfolio, error) {

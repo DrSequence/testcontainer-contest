@@ -1,0 +1,18 @@
+# server
+server:
+  address: "localhost"
+  port: 8080
+
+# database settings
+database:
+  address: "mongodb://localhost:27017"
+  user: "root"
+  pass: "example"
+  database: "test"
+  collection: "portfolio"
+
+# redis
+cache:
+  address: "127.0.0.1:6379"
+  exp: "30s"
+  pass: "dsf231dasd123w12ddxhyjtj"
