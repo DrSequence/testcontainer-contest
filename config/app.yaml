@@ -11,9 +11,8 @@ database:
   database: "test"
   collection: "portfolio"
 
-# memcache
+# redis
 cache:
-  address:
-    - "127.0.0.1:11211"
-    - "127.0.0.1:11212"
-    - "127.0.0.1:11213"
+  address: "127.0.0.1:6379"
+  exp: "30s"
+  pass: "dsf231dasd123w12ddxhyjtj"

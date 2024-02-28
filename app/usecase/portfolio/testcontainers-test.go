@@ -6,6 +6,7 @@ import (
 	"github.com/testcontainers/testcontainers-go/wait"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
+	"testcontainer-contest/config"
 	"testing"
 )
 
@@ -15,15 +16,15 @@ const (
 	listener   = "27017/tcp"
 )
 
-func RunMongo(ctx context.Context, t *testing.T) testcontainers.Container {
+func RunMongo(ctx context.Context, t *testing.T, cfg config.Config) testcontainers.Container {
 	mongodbContainer, err := testcontainers.GenericContainer(ctx, testcontainers.GenericContainerRequest{
 		ContainerRequest: testcontainers.ContainerRequest{
 			Image:        mongoImage,
 			ExposedPorts: []string{listener},
 			WaitingFor:   wait.ForListeningPort(mongoPort),
 			Env: map[string]string{
-				"MONGO_INITDB_ROOT_USERNAME": "root",
-				"MONGO_INITDB_ROOT_PASSWORD": "example",
+				"MONGO_INITDB_ROOT_USERNAME": cfg.Database.Username,
+				"MONGO_INITDB_ROOT_PASSWORD": cfg.Database.Password,
 			},
 		},
 		Started: true,
@@ -35,10 +36,10 @@ func RunMongo(ctx context.Context, t *testing.T) testcontainers.Container {
 	return mongodbContainer
 }
 
-func GetClient(ctx context.Context, t *testing.T, address string) *mongo.Client {
-	client, err := mongo.Connect(ctx, options.Client().ApplyURI(address), options.Client().SetAuth(options.Credential{
-		Username: "root",
-		Password: "example",
+func GetClient(ctx context.Context, t *testing.T, cfg config.Config) *mongo.Client {
+	client, err := mongo.Connect(ctx, options.Client().ApplyURI(cfg.Database.Address), options.Client().SetAuth(options.Credential{
+		Username: cfg.Database.Username,
+		Password: cfg.Database.Password,
 	}))
 	if err != nil {
 		t.Fatal(err)

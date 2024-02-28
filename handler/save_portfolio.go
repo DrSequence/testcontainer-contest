@@ -10,7 +10,7 @@ import (
 	s "testcontainer-contest/app/usecase/portfolio"
 )
 
-func HandleSavePortfolio(service s.Service) http.HandlerFunc {
+func HandleSavePortfolio(service s.PortfolioService) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		if r.Method == "POST" {
 			var portfolio domain.Portfolio
@@ -20,7 +20,8 @@ func HandleSavePortfolio(service s.Service) http.HandlerFunc {
 			}
 			ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 			defer cancel()
-			if err := service.Save(ctx, &portfolio); err != nil {
+
+			if _, err := service.Save(ctx, &portfolio); err != nil {
 				http.Error(w, err.Error(), http.StatusInternalServerError)
 				return
 			}

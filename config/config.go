@@ -4,6 +4,7 @@ import (
 	"gopkg.in/yaml.v3"
 	"log"
 	"os"
+	"time"
 )
 
 type Config struct {
@@ -19,7 +20,9 @@ type Config struct {
 		Collection string `yaml:"collection"`
 	} `yaml:"database"`
 	Cache struct {
-		Address []string `yaml:"address"`
+		Address string        `yaml:"address"`
+		Exp     time.Duration `yaml:"exp"`
+		Pass    string        `yaml:"pass"`
 	} `yaml:"cache"`
 }
 

@@ -5,8 +5,11 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"log"
 	"testing"
+	"time"
 
 	"github.com/stretchr/testify/assert"
+
+	"testcontainer-contest/config"
 	pm "testcontainer-contest/domain"
 )
 
@@ -18,7 +21,18 @@ const (
 func TestFindByIDWithTestContainer(t *testing.T) {
 	ctx := context.Background()
 
-	mongodbContainer := RunMongo(ctx, t)
+	cfg := config.Config{}
+	cfg.Server.Port = "8080"
+	cfg.Server.Host = "localhost"
+	cfg.Database.Username = "root"
+	cfg.Database.Password = "example"
+	cfg.Database.Database = database
+	cfg.Database.Collection = collectionName
+	cfg.Cache.Address = "localhost:6379"
+	cfg.Cache.Exp = 5 * time.Minute
+	cfg.Cache.Pass = "cachepassword"
+
+	mongodbContainer := RunMongo(ctx, t, cfg)
 	// Clean up the container
 	defer func() {
 		if err := mongodbContainer.Terminate(ctx); err != nil {
@@ -28,8 +42,9 @@ func TestFindByIDWithTestContainer(t *testing.T) {
 
 	mappedPort, err := mongodbContainer.MappedPort(ctx, "27017")
 	address := "mongodb://localhost:" + mappedPort.Port()
+	cfg.Database.Address = address
 
-	client := GetClient(ctx, t, address)
+	client := GetClient(ctx, t, cfg)
 	defer client.Disconnect(ctx)
 
 	collection := client.Database(database).Collection(collectionName)
@@ -48,7 +63,7 @@ func TestFindByIDWithTestContainer(t *testing.T) {
 		log.Fatal("InsertedID is not an ObjectID")
 	}
 
-	service, err := NewMongoPortfolioService(address, database, collectionName)
+	service, err := NewMongoPortfolioService(cfg)
 	if err != nil {
 		t.Fatal(err)
 	}

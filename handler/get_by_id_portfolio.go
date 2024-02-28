@@ -11,7 +11,7 @@ import (
 	mapper "testcontainer-contest/pkg"
 )
 
-func HandleGetPortfolio(service s.Service) http.HandlerFunc {
+func HandleGetPortfolio(service s.PortfolioService) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		name := r.URL.Query().Get("ID")
 		if name == "" {
@@ -23,12 +23,12 @@ func HandleGetPortfolio(service s.Service) http.HandlerFunc {
 		defer cancel()
 
 		portfolio, err := service.FindByID(ctx, name)
-
-		res := mapper.MapPortfolioToResult(portfolio)
 		if err != nil {
 			http.Error(w, fmt.Sprintf("Error finding portfolio: %v", err), http.StatusInternalServerError)
 			return
 		}
+
+		res := mapper.MapPortfolioToResult(portfolio)
 
 		w.WriteHeader(http.StatusOK)
 		json.NewEncoder(w).Encode(res)

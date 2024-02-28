@@ -11,17 +11,8 @@ services:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: example
 
-  memcached-1:
-    image: sameersbn/memcached:1.5.6-2
+  redis-cache:
+    image: redis:latest
     ports:
-      - "11211:11211"
-
-  memcached-2:
-    image: sameersbn/memcached:1.5.6-2
-    ports:
-      - "11212:11212"
-
-  memcached-3:
-    image: sameersbn/memcached:1.5.6-2
-    ports:
-      - "11213:11213"
+      - "6379:6379"
+    command: redis-server --save 20 1 --loglevel warning --requirepass dsf231dasd123w12ddxhyjtj

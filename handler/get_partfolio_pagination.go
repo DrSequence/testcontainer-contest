@@ -14,7 +14,7 @@ const (
 	sizeQuery = "pageSize"
 )
 
-func HandleGetPortfolios(service s.Service) http.HandlerFunc {
+func HandleGetPortfolios(service s.PortfolioService) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		pageStr := r.URL.Query().Get(pageQuery)
 		pageSizeStr := r.URL.Query().Get(sizeQuery)
