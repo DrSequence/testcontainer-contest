@@ -1,4 +1,4 @@
-# README for the Testcontainers-Enabled Service
+# Testcontainers-Enabled Service
 
 ## Service Description
 
