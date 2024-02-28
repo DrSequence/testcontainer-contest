@@ -4,7 +4,7 @@ import (
 	"context"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo/options"
-	pm "testcontainer-contest/entity"
+	pm "testcontainer-contest/domain"
 )
 
 func (m *MongoPortfolioService) FindAll(ctx context.Context, page, pageSize int) ([]*pm.Portfolio, error) {

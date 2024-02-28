@@ -10,3 +10,18 @@ services:
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: example
+
+  memcached-1:
+    image: sameersbn/memcached:1.5.6-2
+    ports:
+      - "11211:11211"
+
+  memcached-2:
+    image: sameersbn/memcached:1.5.6-2
+    ports:
+      - "11212:11212"
+
+  memcached-3:
+    image: sameersbn/memcached:1.5.6-2
+    ports:
+      - "11213:11213"

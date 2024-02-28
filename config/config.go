@@ -12,10 +12,15 @@ type Config struct {
 		Host string `yaml:"host"`
 	} `yaml:"server"`
 	Database struct {
-		Address  string `yaml:"address"`
-		Username string `yaml:"user"`
-		Password string `yaml:"pass"`
+		Address    string `yaml:"address"`
+		Username   string `yaml:"user"`
+		Password   string `yaml:"pass"`
+		Database   string `yaml:"database"`
+		Collection string `yaml:"collection"`
 	} `yaml:"database"`
+	Cache struct {
+		Address []string `yaml:"address"`
+	} `yaml:"cache"`
 }
 
 func ReadConfig() Config {

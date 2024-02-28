@@ -8,3 +8,12 @@ database:
   address: "mongodb://localhost:27017"
   user: "root"
   pass: "example"
+  database: "test"
+  collection: "portfolio"
+
+# memcache
+cache:
+  address:
+    - "127.0.0.1:11211"
+    - "127.0.0.1:11212"
+    - "127.0.0.1:11213"

@@ -2,11 +2,11 @@ package portfolio
 
 import (
 	"context"
-	"testcontainer-contest/entity"
+	"testcontainer-contest/domain"
 )
 
 type Service interface {
-	FindByID(ctx context.Context, ID string) (*entity.Portfolio, error)
-	Save(ctx context.Context, portfolio *entity.Portfolio) error
-	FindAll(ctx context.Context, page, pageSize int) ([]*entity.Portfolio, error)
+	FindByID(ctx context.Context, ID string) (*domain.Portfolio, error)
+	Save(ctx context.Context, portfolio *domain.Portfolio) error
+	FindAll(ctx context.Context, page, pageSize int) ([]*domain.Portfolio, error)
 }

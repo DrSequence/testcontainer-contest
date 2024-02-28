@@ -7,7 +7,7 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
-	pm "testcontainer-contest/entity"
+	pm "testcontainer-contest/domain"
 )
 
 const (

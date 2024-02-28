@@ -12,13 +12,8 @@ import (
 
 func main() {
 	cfg := config.ReadConfig()
-	mongo := cfg.Database
-	server := cfg.Server
+	service, err := pt.NewMongoPortfolioService(cfg)
 
-	database := "contest"
-	collection := "portfolio"
-
-	service, err := pt.NewMongoPortfolioService(mongo.Address, database, collection)
 	if err != nil {
 		log.Fatal("Failed to create portfolio service:", err)
 	}
@@ -26,7 +21,7 @@ func main() {
 	http.HandleFunc("/api/v1/portfolio", handler.HandleGetPortfolio(service))
 	http.HandleFunc("/api/v1/save-portfolio", handler.HandleSavePortfolio(service))
 	http.HandleFunc("/api/v1/portfolios", handler.HandleGetPortfolios(service))
-	fmt.Println("Server is running on http://localhost:" + server.Port)
+	fmt.Println("Server is running on http://localhost:" + cfg.Server.Port)
 
-	log.Fatal(http.ListenAndServe(":"+server.Port, nil))
+	log.Fatal(http.ListenAndServe(":"+cfg.Server.Port, nil))
 }
